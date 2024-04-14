@@ -9,7 +9,9 @@ cp ~/.gradle/gradle.properties $homeDir
 cp -r ~/.gradle/develocity $homeDir
 cp -r ~/.gradle/enterprise $homeDir
 
-# Prime the build and HOME directory
+echo "------------------------------------------------------------"
+echo "Priming build with HOME=$homeDir"
+echo "------------------------------------------------------------"
 ./gradlew -g $homeDir --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
 
 caches='transforms groovy-dsl kotlin-dsl'
@@ -30,7 +32,7 @@ do
         # Always remove the local build cache, since we are testing connection with remote build cache
         rm -rf $homeDir/caches/build-cache-1
 
-        ./gradlew -Dscan.tag.remote-cache-experiment-$cache-$buildCache -g $homeDir --$buildCache --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
+        ./gradlew -g $homeDir --$buildCache -Dscan.tag.remote-cache-experiment-$cache-$buildCache --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
         echo ""
     done
 done

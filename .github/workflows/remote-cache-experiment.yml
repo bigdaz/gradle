@@ -13,7 +13,7 @@ jobs:
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
 
-  remote-cache-experiment-matrix:
+  remote-cache-experiment:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,7 +28,7 @@ jobs:
       run: |
         cache='${{ matrix.cache }}'
         buildCache='${{ matrix.buildCache }}'
-        
+
         echo "Test caches/*/$cache removal with --$buildCache"
 
         # Run build once to fully populate Gradle User Home
