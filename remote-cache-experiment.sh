@@ -12,7 +12,7 @@ cp -r ~/.gradle/enterprise $homeDir
 echo "------------------------------------------------------------"
 echo "Priming build with HOME=$homeDir"
 echo "------------------------------------------------------------"
-./gradlew -g $homeDir --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
+./gradlew -g $homeDir -Dscan.tag.remote-cache-experiment-init --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
 
 caches='transforms groovy-dsl kotlin-dsl'
 for cache in $caches

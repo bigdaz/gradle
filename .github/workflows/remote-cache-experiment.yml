@@ -5,17 +5,6 @@ on:
   push:
 
 jobs:
-  remote-cache-experiment-script:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          cache-read-only: false
-      - run: ./remote-cache-experiment.sh
-        env:
-          DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
-
   remote-cache-experiment:
     runs-on: ubuntu-latest
     strategy:
@@ -35,7 +24,7 @@ jobs:
         echo "Test caches/*/$cache removal with --$buildCache"
 
         echo "Running build once to fully populate Gradle User Home"
-        ./gradlew --no-daemon --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true help
+        ./gradlew -Dscan.tag.remote-cache-experiment-init --no-daemon --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true help
         killall -9 java
 
         echo "Removing $cache from $homeDir/caches"
@@ -46,7 +35,7 @@ jobs:
         rm -rf ~/.gradle/caches/build-cache-1
 
         echo "Running build again with --${buildCache}"
-        ./gradlew -Dscan.tag.remote-cache-experiment-$cache-$buildCache --$buildCache --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
+        ./gradlew --$buildCache -Dscan.tag.remote-cache-experiment-$cache-$buildCache --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
       env:
         DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
         
