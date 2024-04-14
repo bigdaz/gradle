@@ -34,9 +34,9 @@ jobs:
 
         echo "Test caches/*/$cache removal with --$buildCache"
 
-        # Run build once to fully populate Gradle User Home
+        echo "Running build once to fully populate Gradle User Home"
         ./gradlew --no-daemon --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true help
-        ./gradlew --no-daemon --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help        killall -9 java
+        killall -9 java
 
         echo "Removing $cache from $homeDir/caches"
         rm -rf ~/.gradle/caches/*/$cache
@@ -45,6 +45,7 @@ jobs:
         # Always remove the local build cache, since we are testing connection with remote build cache
         rm -rf ~/.gradle/caches/build-cache-1
 
+        echo "Running build again with --${buildCache}"
         ./gradlew -Dscan.tag.remote-cache-experiment-$cache-$buildCache --$buildCache --no-configuration-cache -Ddevelocity.deprecation.muteWarnings=true -Dscan.uploadInBackground=false help
       env:
         DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
